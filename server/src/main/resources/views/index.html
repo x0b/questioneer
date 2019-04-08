@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Questioneer Start</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+    <h1>Fragebogen-Tool</h1>
+    <div class="container">
+        <form th:action="@{save-responses}" method="post">
+            <!--/*@thymesVar id="questions" type="java.util.List<io.github.x0b.questioneer.model.Question>"*/-->
+            <div class="form-group" th:each="question,iter : ${questions}">
+                <th:block th:switch="${question.type.name()}" th:with="answer=${'answers['+ iter.index + '].'}">
+                    <h3 th:text="${'Frage ' + iter.count}"></h3>
+                    <div th:case="'EXCL'">
+                        <h6 th:text="${question.text}"></h6>
+                        <div class="form-check" th:each="qoption,qiter : ${question.options}" th:with="option=${answer + 'options[' + qiter.index + '].'}">
+                            <input class="form-check-input" type="radio" th:name="${option + 'key'}" th:id="${'option-' + iter.index + '-' + qiter.index}" th:value="${qoption.key}">
+                            <label class="form-check-label" th:attr="for=${'option-' + iter.index + '-' + qiter.index}" th:text="${qoption.text}"></label>
+                        </div>
+                    </div>
+                    <div th:case="'MULTI'">
+                        <h6 th:text="${question.text}"></h6>
+                        <div class="form-check" th:each="qoption,qiter : ${question.options}" th:with="option=${answer + 'options[' + qiter.index + '].'}">
+                            <input class="form-check-input" type="checkbox" th:name="${option + 'key'}" th:id="${'option-' + iter.index + '-' + qiter.index}" th:value="${qoption.key}">
+                            <label class="form-check-label" th:attr="for=${'option-' + iter.index + '-' + qiter.index}" th:text="${qoption.text}"></label>
+                        </div>
+                    </div>
+                    <div th:case="'TEXT'">
+                        <label th:attr="for=${'question-' + iter.index}" th:text="${question.text}"></label>
+                        <textarea  class="form-control" th:name="${answer + 'options[0].key'}" th:attr="id=${'question-' + iter.index}" rows="4"></textarea>
+                    </div>
+                    <input type="hidden" th:name="${answer + 'questionid'}" th:value="${question.id}">
+                </th:block>
+            </div>
+            <button type="submit" class="btn btn-primary">Absenden</button>
+        </form>
+    </div>
+</body>
+<script src="/js/jquery-3.3.1.slim.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+</html>

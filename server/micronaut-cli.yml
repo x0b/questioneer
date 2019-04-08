@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: io.github.x0b.questioneer
+---
+testFramework: junit
+sourceLanguage: java
