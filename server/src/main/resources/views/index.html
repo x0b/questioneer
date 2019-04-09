@@ -15,7 +15,8 @@
                     <h3 th:text="${'Frage ' + iter.count}"></h3>
                     <div th:case="'EXCL'">
                         <h6 th:text="${question.text}"></h6>
-                        <div class="form-check" th:each="qoption,qiter : ${question.options}" th:with="option=${answer + 'options[' + qiter.index + '].'}">
+						<!-- FIX: -->
+                        <div class="form-check" th:each="qoption,qiter : ${question.options}" th:with="option=${answer + 'options[0].'}">
                             <input class="form-check-input" type="radio" th:name="${option + 'key'}" th:id="${'option-' + iter.index + '-' + qiter.index}" th:value="${qoption.key}">
                             <label class="form-check-label" th:attr="for=${'option-' + iter.index + '-' + qiter.index}" th:text="${qoption.text}"></label>
                         </div>
